@@ -4,8 +4,14 @@
  * @param {...string} fields - the properties paths to pick
  * @returns {object} - returns the new object
  */
+
 export const pick = (obj, ...fields) => {
-    let set = new Set([...fields]);
-    let map = new Map(Object.entries(obj).filter(([key]) => set.has(key)));
-    return Object.fromEntries(map);
+
+    let filtered = {}
+	for (let key in obj) {
+		for (let field of fields) {
+			if (field === key) { filtered[key] = obj[key] } 
+		} 
+	}
+	return filtered  
 };
