@@ -3,24 +3,17 @@
  * @param {string} path - the strings path separated by dot
  * @returns {function} - function-getter which allow get value from object by set path
  */
-// export function createGetter(path) {
-//     getter(path) { 
-//     	return this.path 
-//     }
-// }
-
-
-const product = {
-  category: {
-    title: "Goods"
+export const createGetter = path => {
+  const pathKeys = path.split(".");
+  return function walk(obj) {
+    let currentObject = obj;
+    for (let pathKey of pathKeys) {
+      if (pathKey in currentObject) { 
+        currentObject = currentObject[pathKey];
+      } else {
+        return;
+      }
+    }
+    return currentObject;
   }
-}
-
-function createGetter(path) {
-
-    	return this.path 
-    
-}
-
-const getter = createGetter('category.title');
-console.log(getter(product)); // Goods
+};
