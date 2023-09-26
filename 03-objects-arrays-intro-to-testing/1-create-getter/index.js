@@ -8,11 +8,9 @@ export const createGetter = path => {
   return function walk(obj) {
     let currentObject = obj;
     for (let pathKey of pathKeys) {
-      if (pathKey in currentObject) { 
-        currentObject = currentObject[pathKey];
-      } else {
+      if (!(pathKey in currentObject)) {
         return;
-      }
+      } currentObject = currentObject[pathKey];
     }
     return currentObject;
   }
