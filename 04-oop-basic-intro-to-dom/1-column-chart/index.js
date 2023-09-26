@@ -5,37 +5,36 @@ export default class ColumnChart {
         this.label = config.label;
         this.value = config.value;
         this.link = config.link;
+        this.formatHeading = config.formatHeading;
 		
 		this.element = this.createElement();
-
 
    }
 
     createElement() {
 		const element = document.createElement('div');
 		element.innerHTML = this.template();
-		return element;
+		return element.firstElementChild
    }
 
-    template() {	
+    template() {
+		const maxValue = Math.max(...Object.values(this.data));
 		return (
    			`
-			<div class="dashboard__chart_orders">
 			    <div class="column-chart" style="--chart-height: 50">
 			        <div class="column-chart__title">
 			            Total ${ this.label }
 			            <a href="${ this.link }" class="column-chart__link">View all</a>
 			        </div>
 			        <div class="column-chart__container">
-			            <div data-element="header" class="column-chart__header">${ this.value }</div>
+			            <div data-element="header" class="column-chart__header">${ this.formatHeading ? this.formatHeading(this.value.toLocaleString("en-US")) : this.value }</div>
 			            <div data-element="body" class="column-chart__chart">
 
-				            		${ this.data.map((value) => `<div style="--value: ${ value }" data-tooltip=" ${ value } "></div>` )}
+				            		${ this.data.map((value) => `<div style="--value: ${ value }" data-tooltip="${ Math.round((value / maxValue) * 100) }%"></div>` ).join('') }
  
 			            </div>
 			        </div>
 			    </div>
-			</div>
    			`
    			)
 
