@@ -1,11 +1,13 @@
 export default class ColumnChart {
-	constructor(config) {
+	chartHeight = 50;
+	constructor({ data = [], label, value, link, formatHeading, }) {
 
-		this.data = config.data;
-        this.label = config.label;
-        this.value = config.value;
-        this.link = config.link;
-        this.formatHeading = config.formatHeading;
+		this.data = data;
+        this.label = label;
+        this.value = value;
+        this.link = link;
+        this.formatHeading = formatHeading;
+        this.chartHeight = 50;
 		
 		this.element = this.createElement();
 
@@ -18,11 +20,12 @@ export default class ColumnChart {
    }
 
     template() {
+
 		const maxValue = Math.max(...Object.values(this.data));
-		console.log(this.data)
+		
 		return (
    			`
-			    <div class="column-chart ${ (this.data.length == 0) ? 'column-chart_loading': '' }" style="--chart-height: 50">
+			    <div class="column-chart ${ (this.data.length == 0) ? 'column-chart_loading': '' }" style="--chart-height: ${ this.chartHeight }">
 			        <div class="column-chart__title">
 			            Total ${this.label}
 			            <a href="${this.link}" class="column-chart__link">View all</a>
@@ -57,7 +60,7 @@ export default class ColumnChart {
 		container.appendChild(this.element);
    }
 
-   formatHeading() {
-
+   update(newData) {
+   	this.data = newData;
    }
 }
