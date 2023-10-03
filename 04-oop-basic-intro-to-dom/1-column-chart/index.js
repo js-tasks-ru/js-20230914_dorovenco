@@ -1,30 +1,52 @@
 export default class ColumnChart {
-	chartHeight = 50;
-	constructor({ data = [], label, value, link, formatHeading, }) {
+  element;
+  chartHeight = 50;
+  constructor(props = {}) {
 
-		this.data = data;
-        this.label = label;
-        this.value = value;
-        this.link = link;
-        this.formatHeading = formatHeading;
-        this.chartHeight = 50;
-		
-		this.element = this.createElement();
+    const {
+      data = [],
+        label = '',
+        value = 0,
+        link = '',
+        formatHeading = (value) => value,
+    } = props;
 
-   }
+    this.data = data;
+    this.label = label;
+    this.value = value;
+    this.link = link;
+    this.formatHeading = formatHeading;
 
-    createElement() {
-		const element = document.createElement('div');
-		element.innerHTML = this.template();
-		return element.firstElementChild
-   }
 
-    template() {
+    this.element = this.createElement();
 
-		const maxValue = Math.max(...Object.values(this.data));
-		
-		return (
-   			`
+  }
+
+  createElement() {
+    const element = document.createElement('div');
+    element.innerHTML = this.createTemplate();
+    return element.firstElementChild
+  }
+
+  getColumnProps(data) {
+    const maxValue = Math.max(...data);
+    const scale = 50 / maxValue;
+
+    return data.map(item => {
+      return {
+        percent: (item / maxValue * 100).toFixed(0) + '%',
+        value: String(Math.floor(item * scale))
+      };
+    });
+  }
+
+
+  createTemplate() {
+
+    const maxValue = Math.max(...Object.values(this.data));
+
+    return (
+      `
 			    <div class="column-chart ${ (this.data.length == 0) ? 'column-chart_loading': '' }" style="--chart-height: ${ this.chartHeight }">
 			        <div class="column-chart__title">
 			            Total ${this.label}
@@ -36,31 +58,33 @@ export default class ColumnChart {
 			            </div>
 			            <div data-element="body" class="column-chart__chart">
 
-							${this.data.map((value) => `
-								<div style="--value: ${value}" data-tooltip="${Math.round((value / maxValue) * 100)}%"></div>
-								` ).join('')}
+							${ this.getColumnProps(this.data).map(({value, percent}) => 
+								`
+								<div style="--value: ${value}" data-tooltip="${percent}"></div>
+								` ).join('') }
 			            </div>
 			        </div>
 			    </div>
    			`
-   			)
+    )
 
-   }
+  }
 
-    remove() {
-		this.element.remove();
+  remove() {
+    this.element.remove();
 
-   }
+  }
 
-    destroy() {
-		this.remove();
-   }
+  destroy() {
+    this.remove();
+  }
 
-    render() {
-		container.appendChild(this.element);
-   }
+  render() {
+    container.appendChild(this.element);
+  }
 
-   update(newData) {
-   	this.data = newData;
-   }
+  update(newData) {
+    this.data = newData;
+  }
+
 }
