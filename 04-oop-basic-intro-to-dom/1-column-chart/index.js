@@ -43,7 +43,7 @@ export default class ColumnChart {
 
   createTemplate() {
 
-    const maxValue = Math.max(...Object.values(this.data));
+    const maxValue = Math.max([...this.data]);
 
     return (
       `
@@ -58,10 +58,7 @@ export default class ColumnChart {
 			            </div>
 			            <div data-element="body" class="column-chart__chart">
 
-							${ this.getColumnProps(this.data).map(({value, percent}) => 
-								`
-								<div style="--value: ${value}" data-tooltip="${percent}"></div>
-								` ).join('') }
+							${ this.createColumnsPropsTemplate() }
 			            </div>
 			        </div>
 			    </div>
@@ -69,6 +66,11 @@ export default class ColumnChart {
     )
 
   }
+
+  createColumnsPropsTemplate = () => this.getColumnProps(this.data).map(({value, percent}) => 
+                `
+                <div style="--value: ${value}" data-tooltip="${percent}"></div>
+                ` ).join('') 
 
   remove() {
     this.element.remove();
@@ -79,12 +81,13 @@ export default class ColumnChart {
     this.remove();
   }
 
-  render() {
+  render(container = document.body) {
     container.appendChild(this.element);
   }
 
   update(newData) {
     this.data = newData;
+    this.element.innerHTML = this.createColumnsPropsTemplate();
   }
 
 }

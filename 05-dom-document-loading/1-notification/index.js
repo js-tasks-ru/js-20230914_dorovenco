@@ -29,14 +29,26 @@ remove() {
 
   destroy() {
     this.remove();
+
+    if (this.timerId) {
+      clearTimeout(this.timerId);
+    }
+
   }
 
   show(targetElement = document.body) {
+  
+    if (NotificationMessage.element) {
+      NotificationMessage.element.remove();
+    }
+
     targetElement.append(this.element)
 
-    setTimeout(() => {
-      this.destroy();
-    }, this.duration);
+    this.timerId = setTimeout(() => {
+        this.destroy();
+      }, this.duration);
+
+    NotificationMessage.element = this;
   }
 
 
