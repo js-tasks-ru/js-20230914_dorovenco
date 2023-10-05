@@ -5,10 +5,10 @@ export default class ColumnChart {
 
     const {
       data = [],
-        label = '',
-        value = 0,
-        link = '',
-        formatHeading = (value) => value,
+      label = '',
+      value = 0,
+      link = '',
+      formatHeading = (value) => value,
     } = props;
 
     this.data = data;
@@ -19,13 +19,14 @@ export default class ColumnChart {
 
 
     this.element = this.createElement();
+    this.subElements = { body: this.element.querySelector('[data-element="body"]'), };
 
   }
 
   createElement() {
     const element = document.createElement('div');
     element.innerHTML = this.createTemplate();
-    return element.firstElementChild
+    return element.firstElementChild;
   }
 
   getColumnProps(data) {
@@ -47,7 +48,7 @@ export default class ColumnChart {
 
     return (
       `
-			    <div class="column-chart ${ (this.data.length == 0) ? 'column-chart_loading': '' }" style="--chart-height: ${ this.chartHeight }">
+			    <div class="column-chart ${ (this.data.length == 0) ? 'column-chart_loading' : '' }" style="--chart-height: ${ this.chartHeight }">
 			        <div class="column-chart__title">
 			            Total ${this.label}
 			            <a href="${this.link}" class="column-chart__link">View all</a>
@@ -63,14 +64,14 @@ export default class ColumnChart {
 			        </div>
 			    </div>
    			`
-    )
+    );
 
   }
 
   createColumnsPropsTemplate = () => this.getColumnProps(this.data).map(({value, percent}) => 
-                `
+    `
                 <div style="--value: ${value}" data-tooltip="${percent}"></div>
-                ` ).join('') 
+                `).join('') 
 
   remove() {
     this.element.remove();
@@ -87,7 +88,7 @@ export default class ColumnChart {
 
   update(newData) {
     this.data = newData;
-    this.element.innerHTML = this.createColumnsPropsTemplate();
+    this.subElements.body.innerHTML = this.createColumnsPropsTemplate();
   }
 
 }
