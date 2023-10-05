@@ -13,5 +13,5 @@ export const createGetter = path => {
       } currentObject = currentObject[pathKey];
     }
     return currentObject;
-  }
+  };
 };
