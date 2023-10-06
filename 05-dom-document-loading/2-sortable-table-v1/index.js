@@ -1,5 +1,5 @@
 export default class SortableTable {
-  constructor(headerConfig = [0], data = []) {
+  constructor(headerConfig = [], data = []) {
 
     this.headerConfig = headerConfig;
     this.data = data;
@@ -88,6 +88,7 @@ export default class SortableTable {
     this.subElements.body.innerHTML = this.createTableRowsTemplate(sortedData);
   }
 
+  //By Aleksandr Shaposhnikov
   sortData(field, order) {
     const arr = [...this.data];
     const column = this.headerConfig.find(item => item.id === field);
