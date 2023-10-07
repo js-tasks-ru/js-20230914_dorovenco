@@ -1,6 +1,6 @@
 class Tooltip {
   instance
-  
+
   constructor() {
 
     if (Tooltip.instance) {
@@ -11,6 +11,7 @@ class Tooltip {
   }
 
   render() {
+  	this.element = this.createElement();
     document.body.append(this.element);
   }
 
@@ -34,7 +35,6 @@ class Tooltip {
   onPointerOverEvent = event => {
     if (event.target.hasAttribute('data-tooltip')) {
       this.tooltip = event.target.dataset.tooltip;
-      this.element = this.createElement();
       document.addEventListener("mousemove", this.onPointerMove);
       this.render();
     }
@@ -52,7 +52,9 @@ class Tooltip {
   }
 
   remove() {
-    this.element.remove();
+    if (this.element) {
+      this.element.remove();
+    }
   }
 
   destroy() {
