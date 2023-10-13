@@ -10,19 +10,32 @@ export default class RangePicker {
     this.subElements = {
       input: this.element.querySelector('[data-element="input"]'),
       selector: this.element.querySelector('[data-element="selector]'),
+      selectorRightControl: this.element.getElementsByClassName("rangepicker__selector-control-right")[0],
+      selectorLeftControl: this.element.getElementsByClassName("rangepicker__selector-control-left")[0],
     }
 
-    this.subElements.input.addEventListener("pointerdown", this.onClick);
+    this.subElements.input.addEventListener("pointerdown", this.onInputClick);
+    this.subElements.selectorRightControl.addEventListener("pointerdown", this.onRightSelectorControlClick);
+    this.subElements.selectorLeftControl.addEventListener("pointerdown", this.onLeftSelectorControlClick);
 
   }
 
-  onClick = (event) => {
+  onInputClick = (event) => this.element.classList.toggle("rangepicker_open")
+  
+  onRightSelectorControlClick = (event) =>  this.updateSelector('right')
+  
+  onLeftSelectorControlClick = (event) =>  this.updateSelector('left')
 
-    this.element.classList.toggle("rangepicker_open");
+  updateSelector(direction) {
 
-  }
+  	// if (direction=='right'): {
+  	// 	this.from = this.from + month;
+  	// 	this.to = this.from + month;
+  	// } else if (direction=='left') {
+  	// 	this.from = this.from - month;
+  	// 	this.to = this.from - month; 
+  	// }
 
-  updateSelector() {
     this.subElements.selector.innerHTML = this.createRangepickerSelector();
   }
 
@@ -66,7 +79,7 @@ export default class RangePicker {
       ${ this.createHeaderRangepickerTemplate(this.from) }
 
       ${ this.createDateGridTemplate(this.from) }
-      
+
       </div>
 
       ${ this.createHeaderRangepickerTemplate(this.to) }
