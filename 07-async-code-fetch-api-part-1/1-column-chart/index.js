@@ -1,6 +1,6 @@
 import fetchJson from './utils/fetch-json.js';
 
-import { ColumnChart as ColumnChartV1 } from "../../04-oop-basic-intro-to-dom/1-column-chart/index.js";
+import { default as ColumnChartV1 } from "../../04-oop-basic-intro-to-dom/1-column-chart/index.js";
 
 export default class ColumnChart extends ColumnChartV1 {
 
