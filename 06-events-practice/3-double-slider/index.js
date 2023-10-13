@@ -79,7 +79,7 @@ export default class DoubleSlider {
 
   onPointerMove = event => {
 
-    let percent = Number((event.clientX - this.baseCoords.x) / this.percentStep);
+    let percent = Number((event.clientX - this.baseCoords.left) / this.percentStep);
 
     if (percent < 0) { percent = 0; }
     if (percent > 100) { percent = 100; }
