@@ -50,7 +50,8 @@ export default class RangePicker {
 
   createRangepickerInput = () =>
 
-    `    <div class="rangepicker__input" data-element="input">
+    `    
+    <div class="rangepicker__input" data-element="input">
       <span data-element="from">${ this.from.toLocaleDateString() }</span> -
       <span data-element="to">${ this.to.toLocaleDateString() }</span>
     </div>`
@@ -61,35 +62,16 @@ export default class RangePicker {
       <div class="rangepicker__selector-arrow"></div>
       <div class="rangepicker__selector-control-left"></div>
       <div class="rangepicker__selector-control-right"></div>
-      <div class="rangepicker__calendar">
-        <div class="rangepicker__month-indicator">
-          <time datetime="November">${ this.getMonthName(this.from) }</time>
-        </div>
-        <div class="rangepicker__day-of-week">
-          <div>Пн</div>
-          <div>Вт</div>
-          <div>Ср</div>
-          <div>Чт</div>
-          <div>Пт</div>
-          <div>Сб</div>
-          <div>Вс</div>
-        </div>
-        ${ this.createDateGridTemplate(this.from) }
+
+      ${ this.createHeaderRangepickerTemplate(this.from) }
+
+      ${ this.createDateGridTemplate(this.from) }
+      
       </div>
-      <div class="rangepicker__calendar">
-        <div class="rangepicker__month-indicator">
-          <time datetime="December">${ this.getMonthName(this.to) }</time>
-        </div>
-        <div class="rangepicker__day-of-week">
-          <div>Пн</div>
-          <div>Вт</div>
-          <div>Ср</div>
-          <div>Чт</div>
-          <div>Пт</div>
-          <div>Сб</div>
-          <div>Вс</div>
-        </div>
-   ${ this.createDateGridTemplate(this.to) }
+
+      ${ this.createHeaderRangepickerTemplate(this.to) }
+
+   		${ this.createDateGridTemplate(this.to) }
       </div>`
 
   getMonthName = (date) => date.toLocaleString('default', { month: 'long' })[0].toUpperCase() + date.toLocaleString('default', { month: 'long' }).slice(1)
@@ -104,6 +86,23 @@ export default class RangePicker {
     `
         <div class="rangepicker__date-grid">
         ${ this.createMonthDatesTemplate(date) }
+        </div>
+  `
+
+  createHeaderRangepickerTemplate = (date) =>
+    `
+        <div class="rangepicker__calendar">
+        <div class="rangepicker__month-indicator">
+          <time datetime="December">${ this.getMonthName(date) }</time>
+        </div>
+        <div class="rangepicker__day-of-week">
+          <div>Пн</div>
+          <div>Вт</div>
+          <div>Ср</div>
+          <div>Чт</div>
+          <div>Пт</div>
+          <div>Сб</div>
+          <div>Вс</div>
         </div>
   `
 
