@@ -10,8 +10,56 @@
   <script type="module">
     import DoubleSlider from './index.js';
 
-    const slider = new DoubleSlider();
+    // const slider = new DoubleSlider();
 
-    root.append(slider.element);
+    const doubleSlider = new DoubleSlider({
+      min: 10,
+      max: 200,
+      formatValue: value => '$' + value,
+      selected: {
+        from: 120,
+        to: 150
+      }
+    });
+
+    // root.append(slider.element);
+
+    root.append(doubleSlider.element);
+
+    const leftSlider = doubleSlider.element.querySelector('.range-slider__thumb-left');
+    const rightSlider = doubleSlider.element.querySelector('.range-slider__thumb-right');
+
+    const leftBoundary = doubleSlider.element.querySelector('span[data-element="from"]');
+    const rightBoundary = doubleSlider.element.querySelector('span[data-element="to"]');
+
+    const down = new MouseEvent('pointerdown', {
+      bubbles: true
+    });
+
+    const moveLeft = new MouseEvent('pointermove', {
+      clientX: 0,
+      bubbles: true
+    });
+
+    const moveRight = new MouseEvent('pointermove', {
+      clientX: 1000,
+      bubbles: true
+    });
+
+    const up = new MouseEvent('pointerup', {
+      bubbles: true
+    });
+
+    leftSlider.dispatchEvent(down);
+    leftSlider.dispatchEvent(moveLeft);
+    leftSlider.dispatchEvent(up);
+
+    rightSlider.dispatchEvent(down);
+    rightSlider.dispatchEvent(moveRight);
+    rightSlider.dispatchEvent(up);
+
+    console.log(leftBoundary.textContent)
+    console.log(rightBoundary.textContent)
+
   </script>
 </body>
