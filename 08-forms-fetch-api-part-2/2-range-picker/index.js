@@ -24,7 +24,7 @@ export default class RangePicker {
  
     if (this.initSelector) {
  
-      this.element.innerHTML = this.createTemplate()
+      this.element.innerHTML = this.createRangepickerTemplate()
       this.subElements = {
         input: this.element.querySelector('[data-element="input"]'),
         selector: this.element.querySelector('.rangepicker__selector'), 
@@ -89,6 +89,12 @@ export default class RangePicker {
     </div>
 </div>`)
   }
+
+  createRangepickerTemplate = () => 
+`    <div class="rangepicker">
+      ${ this.createRangepickerInput() }
+      ${this.createRangepickerSelector() } 
+    </div>`
  
   createRangepickerSelector = () =>
     
