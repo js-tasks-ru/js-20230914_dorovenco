@@ -1,110 +1,144 @@
 export default class RangePicker {
-
+ 
   constructor(props = {}) {
-
+ 
     this.from = props.from;
     this.to = props.to;
-
+ 
+    this.selected = this.getRangeISOStringDatesArray(this.from, this.to)
+ 
     this.element = this.createElement();
-
+ 
+    this.trigger = true;
+    this.initSelector = true;
+ 
     this.subElements = {
       input: this.element.querySelector('[data-element="input"]'),
-      selector: this.element.querySelector('[data-element="selector]'),
-      selectorRightControl: this.element.getElementsByClassName("rangepicker__selector-control-right")[0],
-      selectorLeftControl: this.element.getElementsByClassName("rangepicker__selector-control-left")[0],
+      // selector: this.element.getElementsByClassName(this.element.class = "rangepicker__selector")[0],
     }
-
+ 
     this.subElements.input.addEventListener("pointerdown", this.onInputClick);
-    this.subElements.selectorRightControl.addEventListener("pointerdown", this.onRightSelectorControlClick);
-    this.subElements.selectorLeftControl.addEventListener("pointerdown", this.onLeftSelectorControlClick);
-
+    // this.subElements.selector.addEventListener("pointerdown", this.onSelectorControlClick);
   }
-
-  onInputClick = (event) => this.element.classList.toggle("rangepicker_open")
-  
-  onRightSelectorControlClick = (event) =>  this.updateSelector('right')
-  
-  onLeftSelectorControlClick = (event) =>  this.updateSelector('left')
-
-  updateSelector(direction) {
-
-  	// if (direction=='right'): {
-  	// 	this.from = this.from + month;
-  	// 	this.to = this.from + month;
-  	// } else if (direction=='left') {
-  	// 	this.from = this.from - month;
-  	// 	this.to = this.from - month; 
-  	// }
-
-    this.subElements.selector.innerHTML = this.createRangepickerSelector();
+ 
+  onInputClick = (event) => {
+    this.element.classList.toggle("rangepicker_open")
+ 
+    if (this.initSelector) {
+ 
+      this.element.innerHTML = this.createTemplate()
+      this.subElements = {
+        input: this.element.querySelector('[data-element="input"]'),
+        selector: this.element.getElementsByClassName(this.element.class = "rangepicker__selector")[0],
+      }
+ 
+      this.subElements.input.addEventListener("pointerdown", this.onInputClick);
+      this.subElements.selector.addEventListener("pointerdown", this.onSelectorControlClick);
+ 
+      this.initSelector = false;
+    }
   }
-
+ 
+  onSelectorControlClick = (event) => {
+    console.log(this.subElements)
+ 
+    if (event.target.className == 'rangepicker__selector-control-right') {
+      this.to.setMonth(this.to.getMonth() + 1);
+      this.updateSelector()
+ 
+    } else if (event.target.className == 'rangepicker__selector-control-left') {
+      this.to.setMonth(this.to.getMonth() - 1);
+      this.updateSelector()
+ 
+    } else if (event.target.classList.contains("rangepicker__cell")) {
+ 
+      if (this.trigger) {
+        this.trigger = false;
+        this.from = new Date(event.target.getAttribute('data-value'));
+ 
+      } else {
+        this.trigger = true;
+        this.to = new Date(event.target.getAttribute('data-value'));
+        this.selected = this.getRangeISOStringDatesArray(this.from, this.to)
+        this.updateSelector()
+ 
+      }
+    }
+  }
+ 
   createElement() {
     const element = document.createElement('div');
     element.innerHTML = this.createTemplate();
     return element.firstElementChild;
   }
-
+ 
   createTemplate() {
     return (
       `
-  <div class="container">
-  <div class="rangepicker">
-
-  	${ this.createRangepickerInput() }
-
-  	${ this.createRangepickerSelector() }
-   
+      <div class="container">
+        <div class="rangepicker">
+          ${ this.createRangepickerInput() }
+          ${this.createRangepickerSelector()  } 
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-    	    	`)
+      `)
   }
-
+ 
+  createRangepickerSelector = () =>
+    `<div class="rangepicker__selector" data-element="selector">${  this.initSelector ? this.createRangepickerSelectorInner() :  ''}</div> `
+ 
   createRangepickerInput = () =>
-
+ 
     `    
     <div class="rangepicker__input" data-element="input">
       <span data-element="from">${ this.from.toLocaleDateString() }</span> -
       <span data-element="to">${ this.to.toLocaleDateString() }</span>
     </div>`
-
-  createRangepickerSelector = () =>
-
-    `<div class="rangepicker__selector" data-element="selector">
+ 
+  createRangepickerSelectorInner = () =>
+ 
+    `
       <div class="rangepicker__selector-arrow"></div>
       <div class="rangepicker__selector-control-left"></div>
       <div class="rangepicker__selector-control-right"></div>
-
-      ${ this.createHeaderRangepickerTemplate(this.from) }
-
-      ${ this.createDateGridTemplate(this.from) }
-
+      <div class="rangepicker__calendar">
+        ${ this.createHeaderRangepickerTemplate(this.getDateOneMonthBefore(this.to))}
+        ${ this.createDateGridTemplate(this.getDateOneMonthBefore(this.to)) }
       </div>
-
-      ${ this.createHeaderRangepickerTemplate(this.to) }
-
-   		${ this.createDateGridTemplate(this.to) }
-      </div>`
-
-  getMonthName = (date) => date.toLocaleString('default', { month: 'long' })[0].toUpperCase() + date.toLocaleString('default', { month: 'long' }).slice(1)
-
-  createMonthDatesTemplate = (date) => Array(this.getLastDayInMonth(date)).fill().map((x, i) => i + 1).map((day) => `<button type="button" class="rangepicker__cell"${ day==1 ? 'style="--start-from: '+ this.getFirstDayOfWeekInMonth(date) + '"':''} data-value="${ day }">${ day }</button>`).join('')
-
-  getLastDayInMonth = (date) => new Date(date.getFullYear(), date.getMonth(), 0).getDate()
-
-  getFirstDayOfWeekInMonth = (date) => new Date(date.getFullYear(), date.getMonth(), 1).getDay()
-
-  createDateGridTemplate = (date) =>
+      <div class="rangepicker__calendar">
+        ${ this.createHeaderRangepickerTemplate(this.to) }
+       ${ this.createDateGridTemplate(this.to) }
+       </div>
     `
-        <div class="rangepicker__date-grid">
-        ${ this.createMonthDatesTemplate(date) }
-        </div>
-  `
-
+  getMonthName = (date) => date.toLocaleString('default', { month: 'long' })
+ 
+  createMonthDatesTemplate = (date) => this.getRangeDatesArray(this.getFirstDayInMonth(date), this.getLastDayInMonth(date)).map((day) =>
+    `<button
+          data-value="${ day.toISOString()}" 
+          type="button" 
+          class="rangepicker__cell ${ ((this.selected[0] == day.toISOString())||(this.selected[this.selected.length - 1] == day.toISOString()))? 'rangepicker__selected-from': ''  } ${ (this.selected.includes(day.toISOString()) && !((this.selected[0] == day.toISOString())||(this.selected[this.selected.length - 1] == day.toISOString())))? 'rangepicker__selected-between': ''}"
+          ${ day.getDate()==1 ? 'style="--start-from: '+ this.getFirstDayOfWeekInMonth(date) + '"':''} 
+          >
+              ${ day.getDate() } 
+      </button>`).join('')
+ 
+  createDateGridTemplate = (date) => `<div class="rangepicker__date-grid">${ this.createMonthDatesTemplate(date) }</div>`
+ 
+  getLastDayInMonth = (date) => new Date(date.getFullYear(), date.getMonth() + 1, 0)
+ 
+  getFirstDayInMonth = (date) => new Date(date.getFullYear(), date.getMonth(), 1)
+ 
+  getFirstDayOfWeekInMonth = (date) => new Date(date.getFullYear(), date.getMonth(), 1).getDay()
+ 
+  getRangeDatesArray = (from, to) => Array.from({ length: (to - from) / (1000 * 3600 * 24) + 1 }, (value, index) => new Date(new Date(from).setDate(from.getDate() + index)))
+ 
+  getRangeISOStringDatesArray = (from, to) => Array.from({ length: (to - from) / (1000 * 3600 * 24) + 1 }, (value, index) => new Date(new Date(from).setDate(from.getDate() + index)).toISOString())
+ 
+  getDateOneMonthBefore = (date) => new Date(new Date(date).setMonth(date.getMonth() - 1))
+ 
   createHeaderRangepickerTemplate = (date) =>
     `
-        <div class="rangepicker__calendar">
         <div class="rangepicker__month-indicator">
           <time datetime="December">${ this.getMonthName(date) }</time>
         </div>
@@ -118,18 +152,15 @@ export default class RangePicker {
           <div>Вс</div>
         </div>
   `
-
+  updateSelector() {
+    this.subElements.selector.innerHTML = this.createRangepickerSelectorInner();
+  }
+ 
   remove() {
     this.element.remove();
-
   }
-
+ 
   destroy() {
     this.remove();
   }
-
-  render(container = document.body) {
-    container.appendChild(this.element);
-  }
-
 }
