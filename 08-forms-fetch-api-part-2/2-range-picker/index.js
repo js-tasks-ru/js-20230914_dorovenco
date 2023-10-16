@@ -14,11 +14,9 @@ export default class RangePicker {
  
     this.subElements = {
       input: this.element.querySelector('[data-element="input"]'),
-      // selector: this.element.getElementsByClassName(this.element.class = "rangepicker__selector")[0],
     }
  
-    this.subElements.input.addEventListener("pointerdown", this.onInputClick);
-    // this.subElements.selector.addEventListener("pointerdown", this.onSelectorControlClick);
+    this.subElements.input.addEventListener('click', this.onInputClick );
   }
  
   onInputClick = (event) => {
@@ -32,15 +30,14 @@ export default class RangePicker {
         selector: this.element.getElementsByClassName(this.element.class = "rangepicker__selector")[0],
       }
  
-      this.subElements.input.addEventListener("pointerdown", this.onInputClick);
-      this.subElements.selector.addEventListener("pointerdown", this.onSelectorControlClick);
+      this.subElements.input.addEventListener('click', this.onInputClick);
+      this.subElements.selector.addEventListener('click', this.onSelectorControlClick);
  
       this.initSelector = false;
     }
   }
  
   onSelectorControlClick = (event) => {
-    console.log(this.subElements)
  
     if (event.target.className == 'rangepicker__selector-control-right') {
       this.to.setMonth(this.to.getMonth() + 1);
@@ -51,14 +48,23 @@ export default class RangePicker {
       this.updateSelector()
  
     } else if (event.target.classList.contains("rangepicker__cell")) {
- 
+
       if (this.trigger) {
+
+        console.log('первый клик в тестах проходит')
+
+        this.selected = []
+        this.updateSelector()
+
         this.trigger = false;
         this.from = new Date(event.target.getAttribute('data-value'));
- 
       } else {
+
+        console.log(console.log('второй клик в тестах не проходит'))
+
         this.trigger = true;
         this.to = new Date(event.target.getAttribute('data-value'));
+
         this.selected = this.getRangeISOStringDatesArray(this.from, this.to)
         this.updateSelector()
  
@@ -115,13 +121,10 @@ export default class RangePicker {
  
   createMonthDatesTemplate = (date) => this.getRangeDatesArray(this.getFirstDayInMonth(date), this.getLastDayInMonth(date)).map((day) =>
     `<button
-          data-value="${ day.toISOString()}" 
+          data-value="${ day.toLocaleDateString('fr-CA') }" 
           type="button" 
-          class="rangepicker__cell ${ ((this.selected[0] == day.toISOString())||(this.selected[this.selected.length - 1] == day.toISOString()))? 'rangepicker__selected-from': ''  } ${ (this.selected.includes(day.toISOString()) && !((this.selected[0] == day.toISOString())||(this.selected[this.selected.length - 1] == day.toISOString())))? 'rangepicker__selected-between': ''}"
-          ${ day.getDate()==1 ? 'style="--start-from: '+ this.getFirstDayOfWeekInMonth(date) + '"':''} 
-          >
-              ${ day.getDate() } 
-      </button>`).join('')
+          class="rangepicker__cell
+${(this.selected[this.selected.length - 1] == day.toLocaleDateString('fr-CA'))? 'rangepicker__selected-to': '' }${ ((this.selected[0] == day.toLocaleDateString('fr-CA')))? 'rangepicker__selected-from': ''  }${ (this.selected.includes(day.toLocaleDateString('fr-CA')) && !((this.selected[0] == day.toLocaleDateString('fr-CA'))||(this.selected[this.selected.length - 1] == day.toLocaleDateString('fr-CA'))))? 'rangepicker__selected-between': ''}"${ day.getDate()==1 ? 'style="--start-from: '+ this.getFirstDayOfWeekInMonth(date) + '"':''}>${ day.getDate() }</button>`).join('')
  
   createDateGridTemplate = (date) => `<div class="rangepicker__date-grid">${ this.createMonthDatesTemplate(date) }</div>`
  
@@ -133,7 +136,7 @@ export default class RangePicker {
  
   getRangeDatesArray = (from, to) => Array.from({ length: (to - from) / (1000 * 3600 * 24) + 1 }, (value, index) => new Date(new Date(from).setDate(from.getDate() + index)))
  
-  getRangeISOStringDatesArray = (from, to) => Array.from({ length: (to - from) / (1000 * 3600 * 24) + 1 }, (value, index) => new Date(new Date(from).setDate(from.getDate() + index)).toISOString())
+  getRangeISOStringDatesArray = (from, to) => Array.from({ length: (to - from) / (1000 * 3600 * 24) + 1 }, (value, index) => new Date(new Date(from).setDate(from.getDate() + index)).toLocaleDateString('fr-CA'))
  
   getDateOneMonthBefore = (date) => new Date(new Date(date).setMonth(date.getMonth() - 1))
  

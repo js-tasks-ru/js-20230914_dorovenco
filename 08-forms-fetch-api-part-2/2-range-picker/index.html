@@ -32,4 +32,36 @@
   rangePicker.element.addEventListener('date-select', event => {
     console.error(event);
   });
+
+  ///for tests
+
+  const input = rangePicker.element.querySelector('.rangepicker__input');
+
+  input.dispatchEvent(new MouseEvent('click', {
+      bubbles: true
+    }));
+
+  const selector = rangePicker.element.querySelector('.rangepicker__selector');
+  const [firstCalendar, secondCalendar] = selector.querySelectorAll('.rangepicker__calendar');
+
+  const firstDateGrid = firstCalendar.querySelector('.rangepicker__date-grid');
+  const secondDateGrid = secondCalendar.querySelector('.rangepicker__date-grid');
+
+
+  const firstDate = firstDateGrid.firstElementChild;
+  const lastDate = secondDateGrid.lastElementChild;
+
+ console.log(firstDate,lastDate)
+
+  // // change "from" and "to" dates
+  firstDate.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  lastDate.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+  // let from = rangePicker.element.querySelector('.rangepicker__selected-from');
+  // let to = rangePicker.element.querySelector('.rangepicker__selected-to');
+  // let from = rangePicker.element.querySelector('.rangepicker__selected-from');
+  // console.log(from.textContent, to.textContent)
+
+  // // console.log(from.textContent, to.textContent)
+
 </script>
