@@ -52,6 +52,10 @@ export default class RangePicker {
 
         this.trigger = false;
         this.from = new Date(event.target.getAttribute('data-value'));
+
+        document.querySelectorAll('[type="button"]').forEach((element) => {
+          element.classList.remove('rangepicker__selected-between')});
+        
       } else {
 
         this.trigger = true;
