@@ -28,10 +28,13 @@ export default class ProductForm {
   async load(productId) { return { categories: await fetchJson(this.categoryUrl), product: await fetchJson(this.productUrl) }; }
 
   async render(container = document.body) {
+
     this.data = await this.load(this.productId);
-    
     this.element = this.createElement();
-    this.subElements = { productForm: this.element.querySelector('[data-element="productForm"]'), };
+    this.subElements = { 
+    	productForm: this.element.querySelector('[data-element="productForm"]'),
+    	imageListContainer: this.element.querySelector('[data-element="imageListContainer"]'),
+    };
     this.subElements.productForm.addEventListener('submit', this.onSubmit);
     
     container.append(this.element);
