@@ -122,7 +122,7 @@ export default class RangePicker {
   getMonthName = (date) => date.toLocaleString('default', { month: 'long' })
 
   createMonthDatesTemplate = (date) => this.getRangeDatesArray(this.getFirstDayInMonth(date), this.getLastDayInMonth(date)).map((day) => `
-              <button data-value="${ day.toLocaleDateString('fr-CA') }" type="button" class="rangepicker__cell ${(this.selected[this.selected.length - 1] == day.toLocaleDateString('fr-CA'))? 'rangepicker__selected-to': '' }${ ((this.selected[0] == day.toLocaleDateString('fr-CA')))? 'rangepicker__selected-from': ''  }${ (this.selected.includes(day.toLocaleDateString('fr-CA')) && !((this.selected[0] == day.toLocaleDateString('fr-CA'))||(this.selected[this.selected.length - 1] == day.toLocaleDateString('fr-CA'))))? 'rangepicker__selected-between': ''}"${ day.getDate()==1 ? 'style="--start-from: '+ this.getFirstDayOfWeekInMonth(date) + '"':''}>${ day.getDate() }</button>`).join('')
+              <button data-value="${ day.toLocaleDateString('fr-CA') }" type="button" class="rangepicker__cell ${(this.selected[this.selected.length - 1] == this.toOwnLocaleDateString(day) )? 'rangepicker__selected-to': '' }${ ((this.selected[0] == this.toOwnLocaleDateString(day) ))? 'rangepicker__selected-from': ''  }${ (this.selected.includes(this.toOwnLocaleDateString(day) ) && !((this.selected[0] == this.toOwnLocaleDateString(day) )||(this.selected[this.selected.length - 1] == this.toOwnLocaleDateString(day) )))? 'rangepicker__selected-between': ''}"${ day.getDate()==1 ? 'style="--start-from: '+ this.getFirstDayOfWeekInMonth(date) + '"':''}>${ day.getDate() }</button>`).join('')
 
   createDateGridTemplate = (date) => `            
   <div class="rangepicker__date-grid">
@@ -137,9 +137,11 @@ export default class RangePicker {
 
   getRangeDatesArray = (from, to) => Array.from({ length: (to - from) / (1000 * 3600 * 24) + 1 }, (value, index) => new Date(new Date(from).setDate(from.getDate() + index)))
 
-  getRangeISOStringDatesArray = (from, to) => Array.from({ length: (to - from) / (1000 * 3600 * 24) + 1 }, (value, index) => new Date(new Date(from).setDate(from.getDate() + index)).toLocaleDateString('fr-CA'))
+  getRangeISOStringDatesArray = (from, to) => Array.from({ length: (to - from) / (1000 * 3600 * 24) + 1 }, (value, index) => this.toOwnLocaleDateString( new Date(new Date(from).setDate(from.getDate() + index))) )
 
   getDateOneMonthBefore = (date) => new Date(new Date(date).setMonth(date.getMonth() - 1))
+
+  toOwnLocaleDateString = (date) => date.toLocaleString().split(',')[0].split('.').reverse().join('-')
 
   createHeaderRangepickerTemplate = (date) => `
              <div class="rangepicker__month-indicator"><time datetime="December">${ this.getMonthName(date) }</time></div>
