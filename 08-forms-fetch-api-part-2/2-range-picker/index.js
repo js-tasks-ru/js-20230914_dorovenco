@@ -137,7 +137,7 @@ export default class RangePicker {
 
   getRangeDatesArray = (from, to) => Array.from({ length: (to - from) / (1000 * 3600 * 24) + 1 }, (value, index) => new Date(new Date(from).setDate(from.getDate() + index)))
 
-  getRangeISOStringDatesArray = (from, to) => Array.from({ length: (to - from) / (1000 * 3600 * 24) + 1 }, (value, index) => this.toOwnLocaleDateString( new Date(new Date(from).setDate(from.getDate() + index))) )
+  getRangeISOStringDatesArray = (from, to) => Array.from({ length: (to - from) / (1000 * 3600 * 24) + 1 }, (value, index) => this.toOwnLocaleDateString( new Date(new Date(from).setDate(from.getDate() + index))))
 
   getDateOneMonthBefore = (date) => new Date(new Date(date).setMonth(date.getMonth() - 1))
 
