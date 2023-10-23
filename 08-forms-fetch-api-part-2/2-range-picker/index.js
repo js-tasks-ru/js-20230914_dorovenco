@@ -122,7 +122,7 @@ export default class RangePicker {
   getMonthName = (date) => date.toLocaleString('default', { month: 'long' })
 
   createMonthDatesTemplate = (date) => this.getRangeDatesArray(this.getFirstDayInMonth(date), this.getLastDayInMonth(date)).map((day) => `
-              <button data-value="${ day.toLocaleDateString('fr-CA') }" type="button" class="rangepicker__cell ${(this.selected[this.selected.length - 1] == this.toOwnLocaleDateString(day) )? 'rangepicker__selected-to': '' }${ ((this.selected[0] == this.toOwnLocaleDateString(day) ))? 'rangepicker__selected-from': ''  }${ (this.selected.includes(this.toOwnLocaleDateString(day) ) && !((this.selected[0] == this.toOwnLocaleDateString(day) )||(this.selected[this.selected.length - 1] == this.toOwnLocaleDateString(day) )))? 'rangepicker__selected-between': ''}"${ day.getDate()==1 ? 'style="--start-from: '+ this.getFirstDayOfWeekInMonth(date) + '"':''}>${ day.getDate() }</button>`).join('')
+              <button data-value="${ this.toOwnLocaleDateString(day) }" type="button" class="rangepicker__cell ${(this.selected[this.selected.length - 1] == this.toOwnLocaleDateString(day) )? 'rangepicker__selected-to': '' }${ ((this.selected[0] == this.toOwnLocaleDateString(day) ))? 'rangepicker__selected-from': ''  }${ (this.selected.includes(this.toOwnLocaleDateString(day) ) && !((this.selected[0] == this.toOwnLocaleDateString(day) )||(this.selected[this.selected.length - 1] == this.toOwnLocaleDateString(day) )))? 'rangepicker__selected-between': ''}"${ day.getDate()==1 ? 'style="--start-from: '+ this.getFirstDayOfWeekInMonth(date) + '"':''}>${ day.getDate() }</button>`).join('')
 
   createDateGridTemplate = (date) => `            
   <div class="rangepicker__date-grid">
