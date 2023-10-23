@@ -141,7 +141,7 @@ export default class RangePicker {
 
   getDateOneMonthBefore = (date) => new Date(new Date(date).setMonth(date.getMonth() - 1))
 
-  toOwnLocaleDateString = (date) => date.toLocaleString().split(',')[0].split('.').reverse().join('-')
+  toOwnLocaleDateString = (date) => date.toLocaleString('ru', {dateStyle: 'short'}).split(',')[0].split('.').reverse().join('-')
 
   createHeaderRangepickerTemplate = (date) => `
              <div class="rangepicker__month-indicator"><time datetime="December">${ this.getMonthName(date) }</time></div>
