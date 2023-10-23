@@ -15,7 +15,6 @@ export default class ProductForm {
     this.categoryUrl = new URL(CATEGORY_URL, BACKEND_URL);
     this.productUrl = new URL(PRODUCT_URL, BACKEND_URL);
 
-
     if (this.productId) {
       this.productUrl.searchParams.set('id', this.productId);
     }
@@ -27,7 +26,7 @@ export default class ProductForm {
 
   async load(productId) { return { categories: await fetchJson(this.categoryUrl), product: await fetchJson(this.productUrl) }; }
 
-  async render(container = document.body) {
+  async render() {
 
     this.data = await this.load(this.productId);
     this.element = this.createElement();
@@ -37,7 +36,7 @@ export default class ProductForm {
     };
     this.subElements.productForm.addEventListener('submit', this.onSubmit);
     
-    container.append(this.element);
+    return this.element
   }
 
   onSubmit = event => {

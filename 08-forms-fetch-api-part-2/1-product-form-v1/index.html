@@ -43,9 +43,11 @@
 
   root.append(productFormComponent.element);
 
+  console.log(productFormComponent.element)// bad - null
+
   const subcategory = productFormComponent.element.querySelector('#subcategory');
 
-  // console.log(subcategory)// bad
+  console.log(subcategory)// bad - null
 
   const { productForm, imageListContainer } = productFormComponent.subElements;
 
@@ -64,8 +66,8 @@
   const fields = Object.keys(defaultFormData);
   const values = {};
 
-  console.log(productForm.querySelector(`#title`)) // bad
-  console.log(productForm)
+  // console.log(productForm.querySelector(`#title`)) // bad
+  // console.log(productForm)
   
   // for (const field of fields) {
   //   console.log(field)
