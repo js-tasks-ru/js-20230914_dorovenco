@@ -32,4 +32,24 @@
   rangePicker.element.addEventListener('date-select', event => {
     console.error(event);
   });
+
+  ///for tests
+
+ const input = rangePicker.element.querySelector('.rangepicker__input');
+
+    // input.dispatchEvent(new MouseEvent('click', {
+    //   bubbles: true
+    // }));
+
+    // const from = rangePicker.element.querySelector('.rangepicker__selected-from');
+    // const prevDate = from.previousElementSibling;
+
+    // console.log(from, prevDate)//1
+
+    // prevDate.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+
+    // const selectedBetween = rangePicker.element.querySelectorAll('.rangepicker__selected-between');
+
+    // console.log(selectedBetween.length)//0;
+
 </script>
